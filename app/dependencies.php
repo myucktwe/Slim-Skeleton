@@ -7,6 +7,8 @@ use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Slim\Views\Twig;
+use Twig\Loader\FilesystemLoader;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
@@ -23,6 +25,26 @@ return function (ContainerBuilder $containerBuilder) {
             $logger->pushHandler($handler);
 
             return $logger;
+        },
+    ]);
+    $containerBuilder->addDefinitions([
+        Twig::class => function (ContainerInterface $c) {
+            $settings       = $c->get('settings');
+            $twigSettings   = $settings['twig'];
+
+            $loader = new FilesystemLoader(
+                $twigSettings['path_templates']
+            );
+            $options = [
+                'cache' => $twigSettings['path_cache']
+            ];
+
+            $view = new Twig(
+                $loader,
+                $options
+            );
+
+            return $view;
         },
     ]);
 };

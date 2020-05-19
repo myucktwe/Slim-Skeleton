@@ -14,6 +14,17 @@ return function (ContainerBuilder $containerBuilder) {
                 'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
                 'level' => Logger::DEBUG,
             ],
+            'twig' => [
+                'path_templates' => __DIR__ . '/../templates',
+                'path_cache' => false
+            ],
+            'database' => [
+                'host' => 'localhost',
+                'port' => '5432',
+                'database' => 'stocks',
+                'user' => 'postgres',
+                'password' => 'postgres',
+            ],
         ],
     ]);
 };
